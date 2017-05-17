@@ -1,3 +1,6 @@
+# angular-1-redux-sample
+Angular 1 with Redux tutorial to help understand Angular, Redux, Async actions and selectors
+
 <strong>tl;dr:</strong>
 <ul>Install:
     <li>1 - Clone the repository to a local folder;</li>
