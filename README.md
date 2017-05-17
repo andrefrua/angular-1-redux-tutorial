@@ -6,8 +6,8 @@ Angular 1 with Redux tutorial to help understand Angular, Redux, Async actions a
     <li>1 - Clone the repository to a local folder;</li>
     <li>2 - Run the command "npm install" on the root of each project steps;</li>
     <li>3 - Run the command "npm install -g gulp" to install gulp globally</li>
-    <li>3 - Run the command "gulp" for either one of the steps you want to run;</li>    
-    <li>4 - Now opening your browser and pointing to http://localhost:3000 should show you the app running;</li>    
+    <li>4 - Run the command "gulp" for either one of the steps you want to run;</li>    
+    <li>5 - Now opening your browser and pointing to http://localhost:3000 should show you the app running;</li>    
 </ul>
 
 <strong>Detailed:</strong>	
