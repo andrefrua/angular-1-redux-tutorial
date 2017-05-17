@@ -61,6 +61,6 @@ angular
 
         $urlRouterProvider.otherwise('/withredux');
 
-        $ngReduxProvider.createStoreWith(RootReducer, [thunk]);
+        $ngReduxProvider.createStoreWith(RootReducer, [thunk], [window.__REDUX_DEVTOOLS_EXTENSION__()]);
     })
     .component('app', AppComponent);
