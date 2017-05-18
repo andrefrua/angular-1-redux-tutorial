@@ -30,10 +30,10 @@ module.exports = function (config) {
       devtool: 'inline-source-map',
       module: {
         loaders: [
-          { test: /\.js/, exclude: [/app\/lib/, /node_modules/], loader: 'babel' },
-          { test: /\.html/, loader: 'raw' },
-          { test: /\.scss$/, loader: 'style!css!sass' },
-          { test: /\.css$/, loader: 'style!css' }
+          { test: /\.js/, exclude: [/app\/lib/, /node_modules/], loader: 'babel-loader' },
+          { test: /\.html/, loader: 'raw-loader' },
+          { test: /\.scss$/, loader: 'style-loader!css!sass' },
+          { test: /\.css$/, loader: 'style-loader!css' }
         ]
       }
     },

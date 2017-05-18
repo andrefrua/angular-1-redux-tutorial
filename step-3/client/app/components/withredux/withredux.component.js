@@ -1,13 +1,57 @@
 import template from './withredux.html';
-import controller from './withredux.controller';
 import './withredux.scss';
 
-let withReduxComponent = {
-  restrict: 'E',
-  bindings: {},
-  template,
-  controller,
-  transclude: true
-};
+import TodoActions from '../../actions/todo.actions';
+import { TODOS_TO_SHOW } from '../../constants/todos';
+import TodoSelectors from './withredux.selectors'
 
-export default withReduxComponent;
+export const WithReduxComponent = {
+  template,
+  transclude: true,
+  controller: class WithReduxController {
+    constructor($ngRedux) {
+      'ngInject';
+      this.inputTodo = '';
+      this.unsubscribe = $ngRedux.connect(this.mapStateToThis, TodoActions)(this);
+    }
+
+    $onDestroy() {
+      this.unsubscribe();
+    }
+
+    mapStateToThis(state) {
+      return {
+        // TODO: Remove the below line and all it's references. It's just to show the current full state
+        completeState: state,
+
+        //Directly from the state
+        isLoading: state.TodosState.isLoading,
+        showDone: state.TodosState.showDone,
+        notification: state.TodosState.notification,
+        //Gets from the selector
+        noErrorTodos: TodoSelectors.getNoErrorsTodos(state),
+        doneTodos: TodoSelectors.getDoneTodos(state),
+        errorTodos: TodoSelectors.getErrorTodos(state),
+        countAllTodos: TodoSelectors.countAllTodos(state),
+        countDoneTodos: TodoSelectors.countDoneTodos(state),
+        countErrorTodos: TodoSelectors.countErrorTodos(state)
+      }
+    }
+
+    /**
+     * Calls the action addTodo send the input parameter and clearing the input todo
+     */
+    submitTodo() {
+      // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
+      if ((event.type !== 'click' && event.keyCode !== 13) || !this.inputTodo) return;
+
+      this.addTodo(this.inputTodo);
+      this.inputTodo = '';
+    }
+
+    submitTodoInXSeconds(seconds) {
+      this.addTodoThunk(seconds, this.inputTodo);
+      this.inputTodo = '';
+    }
+  }
+};
