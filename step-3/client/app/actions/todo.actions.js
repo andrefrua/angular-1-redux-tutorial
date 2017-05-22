@@ -18,7 +18,7 @@ function addTodo(newTodo, hasError) {
     type: TODOS.ADD_TODO,
     payload: {
       text: newTodo,
-      hasError: hasError
+      hasError: newTodo.toUpperCase().indexOf('ERROR') > -1
     }
   };
 }
@@ -119,16 +119,9 @@ function addTodoThunk(secsToDelay, newTodo) {
     dispatch(setLoading(true));
 
     setTimeout(function() {
-      new Promise(function(resolve, reject) {
-        var randomNumber = Math.floor((Math.random() * 10) + 1);
-        // If the random number is greater to 5 the todo is added to the errors list
-        if (randomNumber <= 5) {
-          dispatch(addTodo(newTodo, false));
+      new Promise(function(resolve, reject) {      
+          dispatch(addTodo(newTodo));
           resolve('To-do created');
-        } else {
-          dispatch(addTodo(newTodo, true));
-          reject('Invalid to-do');
-        }
       }).then(function(result) {
         dispatch(setLoading(false));
       }).catch(function(error) {
