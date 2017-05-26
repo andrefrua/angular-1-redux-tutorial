@@ -47,39 +47,13 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="todolist">
-        <h2>Done</h2>
-        <div ng-if="$ctrl.countDoneTodos > 0">
-          <button class="btn btn-warning marginTop10px" ng-click="$ctrl.markAllAsDone(false)" ng-if="$ctrl.countDoneTodos > 0">Uncheck all</button>
-          <ul class="list-items list-unstyled">
-            <li ng-repeat="doneTodo in $ctrl.doneTodos">
-              {{doneTodo.text}}
-              <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.toggleDone(doneTodo.id)">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div class="center" ng-if="!$ctrl.countDoneTodos > 0">
-          There are no done to-dos
-        </div>
-      </div>
-      <div class="todolist">
-        <h2>Errors</h2>
-        <div ng-if="$ctrl.countErrorTodos > 0">
-          <ul class="list-items list-unstyled">
-            <li ng-repeat="errorTodo in $ctrl.errorTodos">
-              {{errorTodo.text}}
-              <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.cleanError(errorTodo.id)">
-                <span class="glyphicon glyphicon-refresh"></span>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div class="center" ng-if="!$ctrl.countErrorTodos > 0">
-          There are no to-dos with errors
-        </div>
-      </div>
+      <todo-list items-list="$ctrl.doneTodos" items-count="$ctrl.countDoneTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
+        action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
+        button-span-css-class="'glyphicon glyphicon-remove'">
+      </todo-list>
+      <todo-list items-list="$ctrl.errorTodos" items-count="$ctrl.countErrorTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
+        action-type="'CleanError'" title-label="'Error'" no-records-label="'There are no to-dos with errors'" button-css-class="'remove-item btn-primary btn-xs pull-right'"
+        button-span-css-class="'glyphicon glyphicon-refresh'"></todo-list>
     </div>
   </div>
 </div>

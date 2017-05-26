@@ -11,47 +11,69 @@ export const WithReduxComponent = {
   controller: class WithReduxController {
     constructor($ngRedux) {
       'ngInject';
-      this.inputTodo = '';
-      this.unsubscribe = $ngRedux.connect(this.mapStateToThis, TodoActions)(this);
-    }
+      var $ctrl = this;
 
-    $onDestroy() {
-      this.unsubscribe();
-    }
+      $ctrl.$onDestroy = onDestroy;
+      $ctrl.unsubscribe = $ngRedux.connect(mapStateToThis, TodoActions)($ctrl);
 
-    mapStateToThis(state) {
-      return {
-        // TODO: Remove the below line and all it's references. It's just to show the current full state
-        completeState: state,
+      $ctrl.submitTodo = submitTodo;
+      $ctrl.submitTodoInXSeconds = submitTodoInXSeconds;
+      $ctrl.buttonClick = buttonClick;
 
-        //Directly from the state
-        isLoading: state.TodosState.isLoading,
-        showDone: state.TodosState.showDone,
-        notification: state.TodosState.notification,
-        //Gets from the selector
-        noErrorTodos: TodoSelectors.getNoErrorsTodos(state),
-        doneTodos: TodoSelectors.getDoneTodos(state),
-        errorTodos: TodoSelectors.getErrorTodos(state),
-        countAllTodos: TodoSelectors.countAllTodos(state),
-        countDoneTodos: TodoSelectors.countDoneTodos(state),
-        countErrorTodos: TodoSelectors.countErrorTodos(state)
+      $ctrl.inputTodo = '';
+
+      function onDestroy() {
+        $ctrl.unsubscribe();
       }
-    }
 
-    /**
-     * Calls the action addTodo send the input parameter and clearing the input todo
-     */
-    submitTodo() {
-      // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
-      if ((event.type !== 'click' && event.keyCode !== 13) || !this.inputTodo) return;
+      function mapStateToThis(state) {
+        return {
+          // TODO: Remove the below line and all it's references. It's just to show the current full state
+          completeState: state,
 
-      this.addTodo(this.inputTodo);
-      this.inputTodo = '';
-    }
+          //Directly from the state
+          isLoading: state.TodosState.isLoading,
+          showDone: state.TodosState.showDone,
+          notification: state.TodosState.notification,
+          //Gets from the selector
+          noErrorTodos: TodoSelectors.getNoErrorsTodos(state),
+          doneTodos: TodoSelectors.getDoneTodos(state),
+          errorTodos: TodoSelectors.getErrorTodos(state),
+          countAllTodos: TodoSelectors.countAllTodos(state),
+          countDoneTodos: TodoSelectors.countDoneTodos(state),
+          countErrorTodos: TodoSelectors.countErrorTodos(state)
+        }
+      }
 
-    submitTodoInXSeconds(seconds) {
-      this.addTodoThunk(seconds, this.inputTodo);
-      this.inputTodo = '';
+      /**
+       * Calls the action addTodo send the input parameter and clearing the input todo
+       */
+      function submitTodo() {
+        // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
+        if ((event.type !== 'click' && event.keyCode !== 13) || !$ctrl.inputTodo) return;
+
+        $ctrl.addTodo($ctrl.inputTodo);
+        $ctrl.inputTodo = '';
+      }
+
+      function submitTodoInXSeconds(seconds) {
+        $ctrl.addTodoThunk(seconds, $ctrl.inputTodo);
+        $ctrl.inputTodo = '';
+      }
+
+      function buttonClick(id, actionType, event) {
+        switch (actionType) {
+          case 'CleanError':
+            $ctrl.cleanError(id);
+            break;
+          case 'ToggleDone':
+            $ctrl.toggleDone(id);
+            break;
+          default:
+            console.log('Invalid action type');
+            break;
+        }
+      }
     }
   }
 };
