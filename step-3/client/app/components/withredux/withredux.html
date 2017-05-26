@@ -5,9 +5,36 @@
     <div class="col-md-12 text-center">
       <h1>With Redux</h1>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
+      <div class="todolist not-done">
+        <h2>Types</h2>
+        <div class="input-group">
+          <input type="text" class="form-control add-todo input-sm" placeholder="Add type" ng-model="$ctrl.inputType" ng-keyup="$ctrl.submitType($ctrl.inputType)">
+          <span class="input-group-btn">
+            <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputType" ng-click="$ctrl.submitType()">Add</button>
+          </span>
+        </div>
+        <hr class="clearFix">
+        <ul id="sortable" class="list-unstyled">
+          <li class="ui-state-default" ng-repeat="type in $ctrl.allTypes">
+            <div class="checkbox">
+              <label class="">
+                <input type="checkbox" />
+                {{type.text}}
+              </label>
+              <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.removeType($index)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </div>
+          </li>
+        </ul>       
+      </div>
+    </div>
+
+    <div class="col-md-5">
       <div class="todolist not-done">
         <h2>Main</h2>
+      
         <div class="input-group">
           <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo($ctrl.inputTodo)">
           <span class="input-group-btn">
@@ -46,7 +73,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <todo-list items-list="$ctrl.doneTodos" items-count="$ctrl.countDoneTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
         action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
         button-span-css-class="'glyphicon glyphicon-remove'">

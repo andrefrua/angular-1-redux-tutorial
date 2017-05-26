@@ -4,12 +4,24 @@
   "no-undef": 1,
   "no-unused-vars": 1,
   "env": {
-    "amd" : true,
+    "amd": true,
     "jasmine": true,
     "browser": true
   },
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
   "rules": {
-    "max-len": [2, 120, 2],
+    "max-len": [
+      2,
+      120,
+      2
+    ],
     "linebreak-style": "off",
     "padded-blocks": "off"
   },

@@ -6,104 +6,113 @@
 /**
  * Importing the required files
  */
-import { TODOS } from '../constants/todos';
+import {TODO_ACTIONS} from '../constants/todos';
 
 /**
  * Adds a new Todo to the list, clean or with an error
  * @param {String} newTodo - Text to be added for the newly created To-do
  * @param {Boolean} hasError - Informs if there is an error or not
+ * @return {Object}
  */
 function addTodo(newTodo, hasError) {
   return {
-    type: TODOS.ADD_TODO,
+    type: TODO_ACTIONS.ADD_TODO,
     payload: {
       text: newTodo,
-      hasError: newTodo.toUpperCase().indexOf('ERROR') > -1
-    }
+      hasError: newTodo.toUpperCase().indexOf('ERROR') > -1,
+    },
   };
 }
 
 /**
- * Removes the To-do with the received Id
- * @param {Number} id - Id of the To-do to be removed
+ *
+ * @param {Number} id
+ * @return {Object}
  */
 function removeTodo(id) {
   return {
-    type: TODOS.REMOVE_TODO,
-    payload: id
+    type: TODO_ACTIONS.REMOVE_TODO,
+    payload: id,
   };
 }
 
 /**
  * Marks or Unmarks all To-dos as done
  * @param {Boolean} mark - Flag informing if all To-do should be marked as done
+ * @return {Object}
  */
 function markAllAsDone(mark) {
   return {
-    type: TODOS.MARK_ALL_AS_DONE,
-    payload: mark
+    type: TODO_ACTIONS.MARK_ALL_AS_DONE,
+    payload: mark,
   };
 }
 
 /**
  * Deletes all the To-dos that are marked as done
+ * @return {Object}
  */
 function deleteAllDone() {
   return {
-    type: TODOS.REMOVE_ALL_DONE
+    type: TODO_ACTIONS.REMOVE_ALL_DONE,
   };
 }
 
 /**
  * Toggle the option to see done To-dos on the main list
+ * @return {Object}
  */
 function toggleShowDone() {
   return {
-    type: TODOS.TOGGLE_SHOW_DONE
+    type: TODO_ACTIONS.TOGGLE_SHOW_DONE,
   };
 }
 
 /**
  * Toggles the done flag of the specigied to-do
  * @param {Number} id - Id of the To-do to toggle the done flag
+ * @return {Object}
  */
 function toggleDone(id) {
   return {
-    type: TODOS.TOGGLE_DONE,
-    payload: id
+    type: TODO_ACTIONS.TOGGLE_DONE,
+    payload: id,
   };
 }
 
 /**
  * Removes the error flag from the to-do with the received id
  * @param {Number} id - Id of the To-to do be cleaned
+ * @return {Object}
  */
 function cleanError(id) {
   return {
-    type: TODOS.CLEAN_ERROR,
-    payload: id
+    type: TODO_ACTIONS.CLEAN_ERROR,
+    payload: id,
   };
 }
 
 /**
  * Sets or removes the loading flag from the state
  * @param {Boolean} loading - Flag informing if the state should be loading or not
+ * @return {Object}
  */
 function setLoading(loading) {
   return {
-    type: TODOS.SET_LOADING,
-    payload: loading
+    type: TODO_ACTIONS.SET_LOADING,
+    payload: loading,
   };
 }
 
 /**
  * Sets the notification message
  * @param {String} message - Message to be set as the notification
+ * @return {Object}
  */
 function setNotification(message) {
   return {
-    type: TODOS.SET_NOTIFICATION,
-    payload: message
+    type: TODO_ACTIONS.SET_NOTIFICATION,
+    payload: message,
   };
 }
 
@@ -112,6 +121,7 @@ function setNotification(message) {
  * to-do
  * @param {*} secsToDelay - Amount of time to delay the operation in seconds
  * @param {*} newTodo - Text to add to the new to-do
+ * @return {Object}
  */
 function addTodoThunk(secsToDelay, newTodo) {
   return function(dispatch) {
@@ -119,7 +129,7 @@ function addTodoThunk(secsToDelay, newTodo) {
     dispatch(setLoading(true));
 
     setTimeout(function() {
-      new Promise(function(resolve, reject) {      
+      new Promise(function(resolve, reject) {
           dispatch(addTodo(newTodo));
           resolve('To-do created');
       }).then(function(result) {
@@ -143,5 +153,5 @@ export default {
   toggleDone,
   cleanError,
   setLoading,
-  addTodoThunk
+  addTodoThunk,
 };
