@@ -1,7 +1,7 @@
 /**
- * Enumerable to be used on the reducer
+ * Enumerable for the possible todo actions
  */
-export const TODOS = {
+export const TODO_ACTIONS = {
   ADD_TODO: 'ADD_TODO',
   REMOVE_TODO: 'REMOVE_TODO',
   MARK_ALL_AS_DONE: 'MARK_ALL_AS_DONE',
@@ -10,6 +10,5 @@ export const TODOS = {
   TOGGLE_DONE: 'TOGGLE_DONE',
   CLEAN_ERROR: 'CLEAN_ERROR',
   SET_LOADING: 'SET_LOADING',
-  SET_NOTIFICATION: 'SET_NOTIFICATION'
+  SET_NOTIFICATION: 'SET_NOTIFICATION',
 };
-
