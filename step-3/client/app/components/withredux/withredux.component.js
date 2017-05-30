@@ -29,6 +29,7 @@ export const WithReduxComponent = {
       $ctrl.buttonClick = buttonClick;
 
       $ctrl.inputTodo = '';
+      $ctrl.selectedType = -1;
 
       /**
        * onDestroy method
@@ -43,6 +44,7 @@ export const WithReduxComponent = {
        * @return {*} Selectors from the state and other needed variables
        */
       function mapStateToThis(state) {
+        console.log(TypesSelectors.getAllTypes(state));
         return {
           // TODO: Remove the below line and all it's references. It's just to show the current full state
           completeState: state,
@@ -71,8 +73,9 @@ export const WithReduxComponent = {
         // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
         if ((event.type !== 'click' && event.keyCode !== 13) || !$ctrl.inputTodo) return;
 
-        $ctrl.addTodo($ctrl.inputTodo);
+        $ctrl.addTodo($ctrl.inputTodo, $ctrl.selectedType.id);
         $ctrl.inputTodo = '';
+        $ctrl.selectedType = -1;
       }
 
       /**
@@ -80,8 +83,9 @@ export const WithReduxComponent = {
        * @param {*} seconds
        */
       function submitTodoInXSeconds(seconds) {
-        $ctrl.addTodoThunk(seconds, $ctrl.inputTodo);
+        $ctrl.addTodoThunk(seconds, $ctrl.inputTodo, $ctrl.selectedType.id);
         $ctrl.inputTodo = '';
+        $ctrl.selectedType = -1;
       }
 
       /**
@@ -93,6 +97,7 @@ export const WithReduxComponent = {
 
         $ctrl.addType($ctrl.inputType);
         $ctrl.inputType = '';
+        $ctrl.selectedType = -1;
       }
 
       /**

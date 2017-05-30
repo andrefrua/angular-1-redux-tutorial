@@ -16,34 +16,32 @@
         </div>
         <hr class="clearFix">
         <ul id="sortable" class="list-unstyled">
-          <li class="ui-state-default" ng-repeat="type in $ctrl.allTypes">
-            <div class="checkbox">
-              <label class="">
-                <input type="checkbox" />
-                {{type.text}}
-              </label>
-              <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.removeType($index)">
+          <li class="ui-state-default paddingTopBottom5px" ng-repeat="type in $ctrl.allTypes">
+            {{type.text}}
+            <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.removeType($index)">
                 <span class="glyphicon glyphicon-remove"></span>
-              </button>
-            </div>
+            </button>
           </li>
-        </ul>       
+        </ul>
       </div>
     </div>
 
     <div class="col-md-5">
       <div class="todolist not-done">
         <h2>Main</h2>
-      
-        <div class="input-group">
-          <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo($ctrl.inputTodo)">
+
+        <div class="form-inline">
           <span class="input-group-btn">
+            <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo($ctrl.inputTodo)">
+            <select class="form-control input-sm" ng-model="$ctrl.selectedType" ng-options="x.text for x in $ctrl.allTypes"></select>
             <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodo()">Add</button>
             <button class="btn btn-default btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodoInXSeconds(2)">Add in 2 secs</button>
           </span>
         </div>
+
         <button class="btn btn-success btn-sm marginTop10px" ng-if="$ctrl.countDoneTodos !== $ctrl.countAllTodos" ng-click="$ctrl.markAllAsDone(true)">Mark all as done</button>
         <button class="btn btn-danger btn-sm marginTop10px" ng-if="$ctrl.countDoneTodos > 0" ng-click="$ctrl.deleteAllDone()">Delete all done</button>
+
         <div class="checkbox pull-right">
           <label>
             <input type="checkbox" ng-click="$ctrl.toggleShowDone()" />
@@ -51,19 +49,27 @@
           </label>
         </div>
         <hr class="clearFix">
-        <ul id="sortable" class="list-unstyled">
-          <li class="ui-state-default" ng-repeat="todo in $ctrl.noErrorTodos" ng-if="!(!$ctrl.showDone && todo.done)">
-            <div class="checkbox">
-              <label class="done-{{todo.done}}">
-                <input type="checkbox" ng-click="$ctrl.toggleDone(todo.id)" />
-                {{todo.text}}
-              </label>
-              <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.removeTodo($index)">
+
+        <div class="form-inline">
+          <ul id="sortable" class="list-unstyled">
+            <li class="ui-state-default paddingTopBottom5px" ng-repeat="todo in $ctrl.noErrorTodos" ng-if="!(!$ctrl.showDone && todo.done)">
+              <div class="checkbox">
+                <label class="done-{{todo.done}}">
+                  <input type="checkbox" ng-click="$ctrl.toggleDone(todo.id)" />
+                  {{todo.text}}            
+                </label>
+              </div>
+
+              <select class="form-control input-sm" ng-model="todo.type" ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes">     
+              </select>
+              <button class="remove-item btn btn-danger btn-sm pull-right" ng-click="$ctrl.removeTodo($index)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
-            </div>
-          </li>
-        </ul>
+
+            </li>
+          </ul>
+        </div>
+
         <div class="todo-footer">
           <span class="count-todos bold">{{$ctrl.countAllTodos}}</span> total |
           <span class="count-todos bold">{{$ctrl.countDoneTodos}}</span> done |

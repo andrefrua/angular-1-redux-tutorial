@@ -14,11 +14,12 @@ import {TODO_ACTIONS} from '../constants/todos';
  * @param {Boolean} hasError - Informs if there is an error or not
  * @return {Object}
  */
-function addTodo(newTodo, hasError) {
+function addTodo(newTodo, typeId, hasError) {
   return {
     type: TODO_ACTIONS.ADD_TODO,
     payload: {
       text: newTodo,
+      typeId: typeId,
       hasError: newTodo.toUpperCase().indexOf('ERROR') > -1,
     },
   };
@@ -123,14 +124,14 @@ function setNotification(message) {
  * @param {*} newTodo - Text to add to the new to-do
  * @return {Object}
  */
-function addTodoThunk(secsToDelay, newTodo) {
+function addTodoThunk(secsToDelay, newTodo, typeId) {
   return function(dispatch) {
     // First dispatch: Updates the app state to isLoading = true;
     dispatch(setLoading(true));
 
     setTimeout(function() {
       new Promise(function(resolve, reject) {
-          dispatch(addTodo(newTodo));
+          dispatch(addTodo(newTodo, typeId));
           resolve('To-do created');
       }).then(function(result) {
         dispatch(setLoading(false));

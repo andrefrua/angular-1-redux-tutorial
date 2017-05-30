@@ -6,10 +6,10 @@ const initialState = {
   showDone: false,
   showType: '',
   todos: [
-    {id: 1, text: 'First todo item', done: false, error: false},
-    {id: 2, text: 'Second todo item', done: false, error: false},
-    {id: 3, text: 'Todo with error', done: false, error: true},
-    {id: 4, text: 'Another item', done: false, error: false},
+    {id: 1, text: 'First todo item', done: false, error: false, type: 2},
+    {id: 2, text: 'Second todo item', done: false, error: false, type: 3},
+    {id: 3, text: 'Todo with error', done: false, error: true, type: 2},
+    {id: 4, text: 'Another item', done: false, error: false, type: 3},
   ],
 };
 
@@ -30,6 +30,7 @@ export function TodosReducer(state = initialState, action) {
             id: createNewId(state.todos),
             text: action.payload.text,
             done: false,
+            type: action.payload.typeId,
             error: action.payload.hasError,
           }),
         notification: action.payload.hasError ? 'Unable to add to-do' : 'To-do added',
@@ -112,12 +113,12 @@ export function TodosReducer(state = initialState, action) {
  * @param {Object} todos
  * @return {Object}
  */
-  function createNewId(todos) {
-    let newId = Math.max(...todos.map(function(t) {
-      return t.id;
-    }));
+function createNewId(todos) {
+  let newId = Math.max(...todos.map(function(t) {
+    return t.id;
+  }));
 
-    if (isNaN(parseInt(newId))) newId = 0;
+  if (isNaN(parseInt(newId))) newId = 0;
 
-    return ++newId;
-  }
+  return ++newId;
+}
