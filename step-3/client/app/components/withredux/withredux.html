@@ -6,24 +6,23 @@
       <h1>With Redux</h1>
     </div>
     <div class="col-md-3">
-      <div class="todolist not-done">
-        <h2>Types</h2>
-        <div class="input-group">
-          <input type="text" class="form-control add-todo input-sm" placeholder="Add type" ng-model="$ctrl.inputType" ng-keyup="$ctrl.submitType($ctrl.inputType)">
-          <span class="input-group-btn">
+
+      <todo-list items-list="$ctrl.allTypes" items-count="$ctrl.allTypes.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
+        action-type="'RemoveType'" title-label="'Types'" no-records-label="'There are no types'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
+        button-span-css-class="'glyphicon glyphicon-remove'" ul-css-class="'list-items list-unstyled'">
+        <!-- BEGIN: TRANSCLUDE ELEMENTS-->
+        <add-fields-zone>
+          <div class="input-group">
+            <input type="text" class="form-control add-todo input-sm" placeholder="Add type" ng-model="$ctrl.inputType" ng-keyup="$ctrl.submitType($ctrl.inputType)">
+            <span class="input-group-btn">
             <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputType" ng-click="$ctrl.submitType()">Add</button>
           </span>
-        </div>
-        <hr class="clearFix">
-        <ul id="sortable" class="list-unstyled">
-          <li class="ui-state-default paddingTopBottom5px" ng-repeat="type in $ctrl.allTypes">
-            {{type.text}}
-            <button class="remove-item btn btn-danger btn-xs pull-right" ng-click="$ctrl.removeType($index)">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
-          </li>
-        </ul>
-      </div>
+          </div>
+          <hr class="clearFix">
+        </add-fields-zone>
+        <!-- END: TRANSCLUDE ELEMENTS-->
+      </todo-list>
+
     </div>
 
     <div class="col-md-5">
@@ -33,7 +32,7 @@
         <div class="form-inline">
           <span class="input-group-btn">
             <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo($ctrl.inputTodo)">
-            <select class="form-control input-sm" ng-model="$ctrl.selectedType" ng-options="x.text for x in $ctrl.allTypes"></select>
+            <select class="form-control input-sm" ng-model="$ctrl.selectedType" ng-if="$ctrl.countAllTypes > 0" ng-options="x.text for x in $ctrl.allTypes"></select>
             <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodo()">Add</button>
             <button class="btn btn-default btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodoInXSeconds(2)">Add in 2 secs</button>
           </span>
@@ -55,12 +54,12 @@
             <li class="ui-state-default paddingTopBottom5px" ng-repeat="todo in $ctrl.noErrorTodos" ng-if="!(!$ctrl.showDone && todo.done)">
               <div class="checkbox">
                 <label class="done-{{todo.done}}">
-                  <input type="checkbox" ng-click="$ctrl.toggleDone(todo.id)" />
-                  {{todo.text}}            
+                  <input type="checkbox" ng-checked="todo.done" ng-click="$ctrl.toggleDone(todo.id)" />
+                  {{todo.text}}
                 </label>
               </div>
 
-              <select class="form-control input-sm" ng-model="todo.type" ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes">     
+              <select class="form-control input-sm" ng-model="todo.type" ng-if="$ctrl.countAllTypes > 0" ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes">     
               </select>
               <button class="remove-item btn btn-danger btn-sm pull-right" ng-click="$ctrl.removeTodo($index)">
                 <span class="glyphicon glyphicon-remove"></span>
@@ -82,11 +81,12 @@
     <div class="col-md-4">
       <todo-list items-list="$ctrl.doneTodos" items-count="$ctrl.countDoneTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
         action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
-        button-span-css-class="'glyphicon glyphicon-remove'">
+        button-span-css-class="'glyphicon glyphicon-remove'" ul-css-class="'list-items list-unstyled line-through'">
       </todo-list>
       <todo-list items-list="$ctrl.errorTodos" items-count="$ctrl.countErrorTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
         action-type="'CleanError'" title-label="'Error'" no-records-label="'There are no to-dos with errors'" button-css-class="'remove-item btn-primary btn-xs pull-right'"
-        button-span-css-class="'glyphicon glyphicon-refresh'"></todo-list>
+        button-span-css-class="'glyphicon glyphicon-refresh'" ul-css-class="'list-items list-unstyled'">
+      </todo-list>
     </div>
   </div>
 </div>

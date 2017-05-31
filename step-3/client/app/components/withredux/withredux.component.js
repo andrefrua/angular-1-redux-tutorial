@@ -44,7 +44,6 @@ export const WithReduxComponent = {
        * @return {*} Selectors from the state and other needed variables
        */
       function mapStateToThis(state) {
-        console.log(TypesSelectors.getAllTypes(state));
         return {
           // TODO: Remove the below line and all it's references. It's just to show the current full state
           completeState: state,
@@ -63,6 +62,7 @@ export const WithReduxComponent = {
           countErrorTodos: TodosSelectors.countErrorTodos(state),
           // Get from the types selector
           allTypes: TypesSelectors.getAllTypes(state),
+          countAllTypes: TypesSelectors.countAllTypes(state),
         };
       }
 
@@ -113,6 +113,9 @@ export const WithReduxComponent = {
             break;
           case 'ToggleDone':
             $ctrl.toggleDone(id);
+            break;
+          case 'RemoveType':
+            $ctrl.removeType(id);
             break;
           default:
             console.log('Invalid action type');

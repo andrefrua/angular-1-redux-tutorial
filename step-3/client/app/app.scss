@@ -32,11 +32,13 @@ li.ui-state-default:last-child{
 }
 .list-items li{
     padding:10px 0;
-    border-bottom:1px solid #ddd;
-    text-decoration:line-through;
+    border-bottom:1px solid #ddd;    
 }
 .list-items li:last-child{
     border-bottom:none;
+}
+.line-through{
+    text-decoration: line-through;
 }
 .marginTop10px{
     margin-top:10px;
