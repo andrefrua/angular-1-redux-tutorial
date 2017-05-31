@@ -11,9 +11,13 @@ export const TodoListComponent = {
     noRecordsLabel: '<',
     buttonCssClass: '<',
     buttonSpanCssClass: '<',
+    ulCssClass: '<',
     onItemButtonClick: '&',
   },
-  transclude: true,
+  // transclude: true,
+  transclude: {
+    addFields: '?addFieldsZone',
+  },
   template,
   controller: class TodoListController {
     /**
@@ -49,23 +53,6 @@ export const TodoListComponent = {
       function itemButtonClick(id, actionType, event) {
         $ctrl.onItemButtonClick({id: id, actionType: actionType, $event: event});
       }
-
-      /**
-       * Defines UI settings to the buttons
-       */
-      // function setLayout() {
-      //   switch ($ctrl.actionType) {
-      //     case 'ToggleDone':
-      //       $ctrl.buttonClass = 'remove-item btn-danger btn-xs pull-right';
-      //       $ctrl.buttonSpanClass = 'glyphicon glyphicon-remove';
-      //       break;
-
-      //     case 'CleanError':
-      //       $ctrl.buttonClass = 'remove-item btn-primary btn-xs pull-right';
-      //       $ctrl.buttonSpanClass = 'glyphicon glyphicon-refresh';
-      //       break;
-      //   }
-      // }
     }
   },
 };

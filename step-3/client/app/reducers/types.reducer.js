@@ -33,10 +33,7 @@ export function TypesReducer(state = initialState, action) {
     case TYPE_ACTIONS.REMOVE_TYPE:
       return {
         ...state,
-        types: [
-          ...state.types.slice(0, action.payload),
-          ...state.types.slice(action.payload + 1),
-        ],
+        types: state.types.filter((type) => type.id !== action.payload),
         notification: 'Type removed',
       };
 

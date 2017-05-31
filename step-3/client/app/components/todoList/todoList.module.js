@@ -1,8 +1,8 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
-import { TodoListComponent } from './todoList.component';
+import {TodoListComponent} from './todoList.component';
 
-//debugger; 
+// debugger;
 
 export const TodoListModule = angular
   .module('todoList', [uiRouter])
