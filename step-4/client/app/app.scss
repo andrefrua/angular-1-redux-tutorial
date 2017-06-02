@@ -1,0 +1,45 @@
+body{
+    background-color:#EEEEEE !important;
+}
+.todolist{
+    background-color:#FFF;
+    padding: 5px 20px 10px 20px;
+    margin-top:30px;
+}
+.todolist h1, h2{
+    margin:0;
+    padding-bottom:5px;
+    text-align:center;
+}
+
+.form-control{
+    border-radius:0;
+}
+li.ui-state-default{
+    background:#fff;
+    border:none;
+    border-bottom:1px solid #ddd;
+}
+
+li.ui-state-default:last-child{
+    border-bottom:none;
+}
+
+.todo-footer{
+    background-color:#F4FCE8;
+    margin:0 -20px -10px -20px;
+    padding: 10px 20px;
+}
+.list-items li{
+    padding:10px 0;
+    border-bottom:1px solid #ddd;    
+}
+.list-items li:last-child{
+    border-bottom:none;
+}
+.line-through{
+    text-decoration: line-through;
+}
+.marginTop10px{
+    margin-top:10px;
+}
