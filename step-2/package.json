@@ -1,7 +1,7 @@
 {
-  "name": "angular-1-redux-sample",
+  "name": "angular-1-redux-tutorial",
   "version": "0.0.1",
-  "description": "Angular 1 with ng-redux sample",
+  "description": "Angular 1 with ng-Redux Tutorial",
   "main": "index.js",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.0",
