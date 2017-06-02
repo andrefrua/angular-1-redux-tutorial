@@ -1,0 +1,20 @@
+<div class="todolist">
+  <h2>{{$ctrl.titleLabel}}</h2>
+
+  <div ng-transclude="addFields"></div>
+
+  <div ng-if="$ctrl.itemsCount > 0">
+    <ul ng-class="$ctrl.ulCssClass">
+      <li ng-repeat="item in $ctrl.itemsList">
+        {{item.text}}
+        <button ng-class="$ctrl.buttonCssClass" ng-click="$ctrl.itemButtonClick(item.id, $ctrl.actionType , $event)">
+          <span ng-class="$ctrl.buttonSpanCssClass"></span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="center" ng-if="!$ctrl.itemsCount > 0">
+    {{$ctrl.noRecordsLabel}}
+  </div>
+
+</div>
