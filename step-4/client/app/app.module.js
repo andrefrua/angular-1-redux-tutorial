@@ -39,26 +39,12 @@ export const AppModule = angular
         abstract: true,
         template: '<app></app>',
       })
-      .state('app.tab', {
-        url: '/type/:type',
-        template: '<with-redux></with-redux>',
-      })
-      // Home
-      .state('app.home', {
-        url: '/home',
-        template: '<home></home>',
-      })
-      // NoRedux
-      .state('app.noredux', {
-        url: '/noredux',
-        template: '<noredux></noredux>',
-      })
-      // Todo page with Redux
-      .state('app.withredux', {
-        url: '/withredux',
+      .state('app.type', {
+        url: '/:typeid',
         template: '<with-redux></with-redux>',
       });
-    $urlRouterProvider.otherwise('/withredux');
+
+    $urlRouterProvider.otherwise('/0');
 
     $ngReduxProvider.createStoreWith(RootReducer, [thunk], [window.__REDUX_DEVTOOLS_EXTENSION__()]);
   })

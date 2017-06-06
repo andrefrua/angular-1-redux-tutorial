@@ -1,3 +1,11 @@
-.navbar{
-  background-color: lightblue;
+.navbar-brand a:link,
+.navbar-brand a:visited  {
+  color: #5e5e5e;
+  text-decoration: none;
+}
+
+.navbar-brand a:hover,
+.navbar-brand a:active {
+  color: #337ab7;
+  text-decoration: none;
 }

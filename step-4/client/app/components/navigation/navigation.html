@@ -1,23 +1,43 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
 
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#!/home">Home</a>
-      <a class="navbar-brand" href="#!/noredux">No redux</a>
-      <a class="navbar-brand" href="#!/withredux">With redux</a>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!--Adds an extra li element to show all the type of todos-->
+        <li><a href="#!/0">All types</a></li>
+
+        <li ng-repeat="type in $ctrl.allTypes">
+          <!--ng-class="{active: parseInt($ctrl.selectedType) === parseInt(type.id)}"-->
+          <!--class="active"-->
+          <!--{{$ctrl.selectedType}}
+          {{type.id}}
+
+          {{parseInt($ctrl.selectedType) === parseInt(type.id)}}-->
+
+            <a href="#!/{{type.id}}">
+              {{type.text}}
+              <button class="remove-item btn-danger btn-xs" ng-click="$ctrl.removeTypeAndPreventDefault(type.id);">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </a>            
+
+
+        </li>
+
+      </ul>
+
+      <div id="right">
+        <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Add new type here..." ng-model="$ctrl.inputType" ng-keyup="$ctrl.submitType($ctrl.inputType)">
+          </div>
+          <button type="submit" class="btn btn-primary" ng-disabled="!$ctrl.inputType" ng-click="$ctrl.submitType()">Add type</button>
+        </form>
+
+      </div>
     </div>
+    <!-- /.navbar-collapse -->
   </div>
-</nav>
-
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-
-    <div class="navbar-header lightblue">
-
-
-
-<a class="navbar-brand" ng-repeat="type in $ctrl.allTypes" href="#!/type/{{type.id}}">{{type.text}}</a>
-
-    </div>
-  </div>
+  <!-- /.container-fluid -->
 </nav>

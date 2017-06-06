@@ -11,6 +11,7 @@ import {TODO_ACTIONS} from '../constants/todos';
 /**
  * Adds a new Todo to the list, clean or with an error
  * @param {String} newTodo - Text to be added for the newly created To-do
+ * @param {Number} typeId - Type id to be associated on the Todo
  * @param {Boolean} hasError - Informs if there is an error or not
  * @return {Object}
  */
@@ -34,6 +35,22 @@ function removeTodo(id) {
   return {
     type: TODO_ACTIONS.REMOVE_TODO,
     payload: id,
+  };
+}
+
+/**
+ * Changes the type of the received todo
+ * @param {Number} todoId
+ * @param {Number} typeId
+ * @return {Object}
+ */
+function changeTodoType(todoId, typeId) {
+  return {
+    type: TODO_ACTIONS.CHANGE_TYPE,
+    payload: {
+      todoId: todoId,
+      typeId: typeId,
+    },
   };
 }
 
@@ -122,6 +139,7 @@ function setNotification(message) {
  * to-do
  * @param {*} secsToDelay - Amount of time to delay the operation in seconds
  * @param {*} newTodo - Text to add to the new to-do
+ * @param {*} typeId - Type id to be added to the Todo
  * @return {Object}
  */
 function addTodoThunk(secsToDelay, newTodo, typeId) {
@@ -131,8 +149,8 @@ function addTodoThunk(secsToDelay, newTodo, typeId) {
 
     setTimeout(function() {
       new Promise(function(resolve, reject) {
-          dispatch(addTodo(newTodo, typeId));
-          resolve('To-do created');
+        dispatch(addTodo(newTodo, typeId));
+        resolve('To-do created');
       }).then(function(result) {
         dispatch(setLoading(false));
       }).catch(function(error) {
@@ -142,17 +160,20 @@ function addTodoThunk(secsToDelay, newTodo, typeId) {
   };
 }
 
+
 /**
  * Exports the function so that they can be used as actions
  */
 export default {
   addTodo,
   removeTodo,
+  changeTodoType,
   markAllAsDone,
   deleteAllDone,
   toggleShowDone,
   toggleDone,
   cleanError,
   setLoading,
+  setNotification,
   addTodoThunk,
 };

@@ -1,4 +1,5 @@
 import template from './navigation.html';
+import './navigation.scss';
 
 import TypeActions from '../../actions/type.actions';
 import TypesSelectors from '../../selectors/types.selectors';
@@ -9,14 +10,19 @@ export const NavigationComponent = {
     /**
      * Constructor for the NavigationComponent
      * @param {*} $ngRedux
+     * @param {*} $stateParams
      */
-    constructor($ngRedux) {
+    constructor($ngRedux, $stateParams) {
       'ngInject';
       let $ctrl = this;
 
       $ctrl.$onDestroy = onDestroy;
+      $ctrl.submitType = submitType;
+      $ctrl.removeTypeAndPreventDefault = removeTypeAndPreventDefault;
+
       $ctrl.unsubscribe = $ngRedux.connect(mapStateToThis, {...TypeActions})($ctrl);
 
+      $ctrl.selectedType = $stateParams.type;
 
       /**
        * onDestroy method
@@ -25,35 +31,37 @@ export const NavigationComponent = {
         $ctrl.unsubscribe();
       }
 
-            /**
+      /**
        * mapStateToThis - Maps the state to the controller
        * @param {*} state
        * @return {*} Selectors from the state and other needed variables
        */
       function mapStateToThis(state) {
         return {
-          // TODO: Remove the below line and all it's references. It's just to show the current full state
-          completeState: state,
-
-          // // Directly from the state
-          // isLoading: state.TodosState.isLoading,
-          // showType: state.TodosState.showType,
-          // showDone: state.TodosState.showDone,
-          // notification: state.TodosState.notification,
-          // // Gets from the todo selector
-          // noErrorTodos: TodosSelectors.getNoErrorsTodos(state),
-          // doneTodos: TodosSelectors.getDoneTodos(state),
-          // errorTodos: TodosSelectors.getErrorTodos(state),
-          // countAllTodos: TodosSelectors.countAllTodos(state),
-          // countDoneTodos: TodosSelectors.countDoneTodos(state),
-          // countErrorTodos: TodosSelectors.countErrorTodos(state),
-          // Get from the types selector
           allTypes: TypesSelectors.getAllTypes(state),
-          countAllTypes: TypesSelectors.countAllTypes(state),
-
-          // Parametric Selectors
-          //getTodosByTypeGenerator: TodosSelectors.getTodosByTypeGenerator(2),
         };
+      }
+
+      /**
+       * Calls the action addType send the input parameter and clearing the input type
+       */
+      function submitType() {
+        // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
+        if ((event.type !== 'click' && event.keyCode !== 13) || !$ctrl.inputType) return;
+
+        $ctrl.addType($ctrl.inputType);
+        $ctrl.inputType = '';
+        // $ctrl.selectedType = -1;
+      }
+
+      /**
+       * Removes the type with the received Id and prevents the default behavior of the link so that the type filter
+       * doesn't change
+       * @param {*} typeId
+       */
+      function removeTypeAndPreventDefault(typeId) {
+        $ctrl.removeType(typeId);
+        event.preventDefault();
       }
 
     }
