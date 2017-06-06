@@ -1,28 +1,18 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <!--Adds an extra li element to show all the type of todos-->
-        <li><a href="#!/0">All types</a></li>
+        <li ng-class="{active: $ctrl.selectedTypeId == 0}"><a href="#!/0">All types</a></li>
 
-        <li ng-repeat="type in $ctrl.allTypes">
-          <!--ng-class="{active: parseInt($ctrl.selectedType) === parseInt(type.id)}"-->
-          <!--class="active"-->
-          <!--{{$ctrl.selectedType}}
-          {{type.id}}
-
-          {{parseInt($ctrl.selectedType) === parseInt(type.id)}}-->
-
-            <a href="#!/{{type.id}}">
+        <li ng-class="{active: $ctrl.selectedTypeId == type.id}" ng-repeat="type in $ctrl.allTypes">
+          <a href="#!/{{type.id}}">
               {{type.text}}
-              <button class="remove-item btn-danger btn-xs" ng-click="$ctrl.removeTypeAndPreventDefault(type.id);">
+              <button class="btn btn-danger btn-xs marginTopBottomMinus5px" ng-click="$ctrl.removeTypeAndPreventDefault(type.id);">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
-            </a>            
-
-
+            </a>
         </li>
 
       </ul>
@@ -41,3 +31,11 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
+
+<!--<div>
+  <code>{{$ctrl.completeState}}</code>
+  <p class="bold marginTop10px">Current cache:</p>
+  Main list: <code>{{$ctrl.noErrorTodosByTypeCache.list()}}</code><br/>
+  Done list: <code>{{$ctrl.doneTodosByTypeCache.list()}}</code><br/>
+  Errors list: <code>{{$ctrl.errorTodosByTypeCache.list()}}</code><br/>
+</div>-->

@@ -66,9 +66,13 @@ export const WithReduxComponent = {
             doneTodosByType: TodosSelectors.getDoneTodosByTypeGenerator(typeId)(state),
             errorTodosByType: TodosSelectors.getErrorTodosByTypeGenerator(typeId)(state),
 
+            // Parametric Selectors to list and delete
+            noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
+            doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
+            errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
+
             // Get from the types selector
             allTypes: TypesSelectors.getAllTypes(state),
-
           };
         };
       };
