@@ -41,7 +41,7 @@ export const AppModule = angular
       })
       .state('app.type', {
         url: '/:typeid',
-        template: '<with-redux></with-redux>',
+        template: '<navigation></navigation><with-redux></with-redux>',
       });
 
     $urlRouterProvider.otherwise('/0');

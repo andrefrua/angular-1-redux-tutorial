@@ -38,13 +38,8 @@
                 </label>
               </div>
 
-              <select 
-                class="form-control input-sm" 
-                ng-init="selectedType=todo.type"
-                ng-model="selectedType" 
-                ng-if="$ctrl.allTypes.length > 0" 
-                ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes"
-                ng-change="$ctrl.submitChangeTodoType(todo.id, selectedType)">     
+              <select class="form-control input-sm" ng-init="selectedType=todo.type" ng-model="selectedType" ng-if="$ctrl.allTypes.length > 0"
+                ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes" ng-change="$ctrl.submitChangeTodoType(todo.id, selectedType)">     
               </select>
 
               <button class="remove-item btn btn-danger btn-sm pull-right" ng-click="$ctrl.removeTodo($index)">
@@ -71,18 +66,23 @@
     </div>
     <div class="col-md-4">
       <todo-list items-list="$ctrl.doneTodosByType" items-count="$ctrl.doneTodosByType.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
-        action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
+        action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'btn btn-danger btn-xs pull-right'"
         button-span-css-class="'glyphicon glyphicon-remove'" ul-css-class="'list-items list-unstyled line-through'">
       </todo-list>
       <todo-list items-list="$ctrl.errorTodosByType" items-count="$ctrl.errorTodosByType.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
-        action-type="'CleanError'" title-label="'Error'" no-records-label="'There are no to-dos with errors'" button-css-class="'remove-item btn-primary btn-xs pull-right'"
+        action-type="'CleanError'" title-label="'Error'" no-records-label="'There are no to-dos with errors'" button-css-class="'btn btn-primary btn-xs pull-right'"
         button-span-css-class="'glyphicon glyphicon-refresh'" ul-css-class="'list-items list-unstyled'">
       </todo-list>
     </div>
   </div>
 
   <div class="marginTop30px">
+    <p class="bold">Current state:</p>
     <code>{{$ctrl.completeState}}</code>
+    <p class="bold marginTop10px">Current cache:</p>
+    Main list: <code>{{$ctrl.noErrorTodosByTypeCache.list()}}</code><br/>
+    Done list: <code>{{$ctrl.doneTodosByTypeCache.list()}}</code><br/>
+    Errors list: <code>{{$ctrl.errorTodosByTypeCache.list()}}</code><br/>
   </div>
 
 </div>
