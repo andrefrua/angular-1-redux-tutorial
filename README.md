@@ -44,3 +44,7 @@ Angular 1 with Redux tutorial to help understand Angular, Redux, Async actions a
         </ul>        
     </li>
 </ul>
+<ul><strong>Step 4 - Everything used in step 3 with the addition of parametric selectors:</strong>
+    <li>1 To run this step simply do same as done on the previous steps;</li>
+    <li>2 On the withredux component inside the mapStateToThis functions the parametric selectors were added, the function was also changes in order to received the type id as a parameter</li>
+</ul>
