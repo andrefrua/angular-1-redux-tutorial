@@ -14,6 +14,7 @@ export const WithReduxComponent = {
     /**
      * Constructor for the WithReduxComponent
      * @param {*} $ngRedux
+     * @param {*} $stateParams
      */
     constructor($ngRedux, $stateParams) {
       'ngInject';
@@ -21,17 +22,20 @@ export const WithReduxComponent = {
 
       $ctrl.$onDestroy = onDestroy;
 
-
       $ctrl.submitTodo = submitTodo;
       $ctrl.submitTodoInXSeconds = submitTodoInXSeconds;
-      $ctrl.submitType = submitType;
+      $ctrl.submitChangeTodoType = submitChangeTodoType;
 
       $ctrl.buttonClick = buttonClick;
+      $ctrl.getTypeById = getTypeById;
 
       $ctrl.inputTodo = '';
-      $ctrl.selectedType = -1;
+      $ctrl.selectedTypeId = $stateParams.typeid;
 
-      $ctrl.unsubscribe = $ngRedux.connect(mapStateToThis($stateParams.type), {...TodoActions, ...TypeActions})($ctrl);
+      $ctrl.unsubscribe = $ngRedux.connect(
+        mapStateToThis($stateParams.typeid), {...TodoActions, ...TypeActions}
+      )($ctrl);
+
       /**
        * onDestroy method
        */
@@ -41,35 +45,30 @@ export const WithReduxComponent = {
 
       /**
        * mapStateToThis - Maps the state to the controller
-       * @param {*} state
+       * @param {*} typeId
        * @return {*} Selectors from the state and other needed variables
        */
-      function mapStateToThis(type) {
-
+      function mapStateToThis(typeId) {
         return (state) => {
 
           return {
-          // TODO: Remove the below line and all it's references. It's just to show the current full state
-          completeState: state,
-          // Directly from the state
-          isLoading: state.TodosState.isLoading,
-          showType: state.TodosState.showType,
-          showDone: state.TodosState.showDone,
-          notification: state.TodosState.notification,
-          // Gets from the todo selector
-          noErrorTodos: TodosSelectors.getNoErrorsTodos(state),
-          doneTodos: TodosSelectors.getDoneTodos(state),
-          errorTodos: TodosSelectors.getErrorTodos(state),
-          countAllTodos: TodosSelectors.countAllTodos(state),
-          countDoneTodos: TodosSelectors.countDoneTodos(state),
-          countErrorTodos: TodosSelectors.countErrorTodos(state),
-          // Get from the types selector
-          allTypes: TypesSelectors.getAllTypes(state),
-          countAllTypes: TypesSelectors.countAllTypes(state),
+            // TODO: Remove the below line and all it's references. It's just to show the current full state
+            completeState: state,
 
-          // Parametric Selectors
-          allTodos: TodosSelectors.getAllTodosByTypeGenerator(type)(state),
-          // getTodosByTypeGenerator: ,
+            // Directly from the state
+            isLoading: state.TodosState.isLoading,
+            showType: state.TodosState.showType,
+            showDone: state.TodosState.showDone,
+            notification: state.TodosState.notification,
+
+            // Parametric Selectors
+            noErrorTodosByType: TodosSelectors.getNoErrorTodosByTypeGenerator(typeId)(state),
+            doneTodosByType: TodosSelectors.getDoneTodosByTypeGenerator(typeId)(state),
+            errorTodosByType: TodosSelectors.getErrorTodosByTypeGenerator(typeId)(state),
+
+            // Get from the types selector
+            allTypes: TypesSelectors.getAllTypes(state),
+
           };
         };
       };
@@ -97,15 +96,12 @@ export const WithReduxComponent = {
       }
 
       /**
-       * Calls the action addType send the input parameter and clearing the input type
+       * Calls the addTodo action but with a delay of x seconds
+       * @param {Number} todoId
+       * @param {Number} typeId
        */
-      function submitType() {
-        // Exits if it's neither a mouse click, a enter key press or the inputTodo is empty
-        if ((event.type !== 'click' && event.keyCode !== 13) || !$ctrl.inputType) return;
-
-        $ctrl.addType($ctrl.inputType);
-        $ctrl.inputType = '';
-        $ctrl.selectedType = -1;
+      function submitChangeTodoType(todoId, typeId) {
+        $ctrl.changeTodoType(todoId, typeId);
       }
 
       /**
@@ -122,13 +118,20 @@ export const WithReduxComponent = {
           case 'ToggleDone':
             $ctrl.toggleDone(id);
             break;
-          case 'RemoveType':
-            $ctrl.removeType(id);
-            break;
           default:
             console.log('Invalid action type');
             break;
         }
+      }
+
+      /**
+       * Returns the name of the type using the received Id
+       * @param {Number} typeId
+       * @return {String} Name of the type
+       */
+      function getTypeById(typeId) {
+        let types = $ctrl.allTypes.filter((type) => type.id === parseInt(typeId));
+        return types.length > 0 ? types[0].text : 'All types';
       }
     }
   },

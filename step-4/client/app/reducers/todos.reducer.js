@@ -45,6 +45,14 @@ export function TodosReducer(state = initialState, action) {
         ],
         notification: 'To-do removed',
       };
+
+    case TODO_ACTIONS.CHANGE_TYPE:
+      return {
+        ...state,
+        todos: state.todos.map(function(todo) {
+          return todo.id === action.payload.todoId ? {...todo, type: action.payload.typeId} : todo;
+        }),
+      };
     case TODO_ACTIONS.REMOVE_ALL_DONE:
       return {
         ...state,

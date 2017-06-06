@@ -2,7 +2,7 @@ import {TYPE_ACTIONS} from '../constants/types';
 
 const initialState = {
   types: [
-    {id: 1, text: 'Undefined'},
+    {id: 1, text: 'Default'},
     {id: 2, text: 'Home'},
     {id: 3, text: 'Work'},
   ],

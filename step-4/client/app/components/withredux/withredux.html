@@ -1,40 +1,19 @@
-<code>{{$ctrl.completeState}}</code>
-
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-center">
-      <h1>With Redux</h1>
-    </div>
-    <div class="col-md-3">
-
-      <todo-list items-list="$ctrl.allTypes" items-count="$ctrl.allTypes.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
-        action-type="'RemoveType'" title-label="'Types'" no-records-label="'There are no types'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
-        button-span-css-class="'glyphicon glyphicon-remove'" ul-css-class="'list-items list-unstyled'">
-        <!-- BEGIN: TRANSCLUDE ELEMENTS-->
-        <add-fields-zone>
-          <div class="input-group">
-            <input type="text" class="form-control add-todo input-sm" placeholder="Add type" ng-model="$ctrl.inputType" ng-keyup="$ctrl.submitType($ctrl.inputType)">
-            <span class="input-group-btn">
-            <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputType" ng-click="$ctrl.submitType()">Add</button>
-          </span>
-          </div>
-          <hr class="clearFix">
-        </add-fields-zone>
-        <!-- END: TRANSCLUDE ELEMENTS-->
-      </todo-list>
-
+      <h1>Selected type: {{$ctrl.getTypeById($ctrl.selectedTypeId)}}</h1>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-8">
       <div class="todolist not-done">
         <h2>Main</h2>
 
         <div class="form-inline">
           <span class="input-group-btn">
-            <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo($ctrl.inputTodo)">
-            <select class="form-control input-sm minWidth100px" ng-model="$ctrl.selectedType" ng-if="$ctrl.countAllTypes > 0" ng-options="x.text for x in $ctrl.allTypes"></select>
-            <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodo()">Add</button>
-            <button class="btn btn-default btn-sm" type="button" ng-disabled="!$ctrl.inputTodo" ng-click="$ctrl.submitTodoInXSeconds(2)">Add in 2 secs</button>
+            <input type="text" class="form-control add-todo input-sm" placeholder="Add todo" ng-model="$ctrl.inputTodo" ng-keyup="$ctrl.submitTodo()">
+            <select class="form-control input-sm minWidth100px" ng-model="$ctrl.selectedType" ng-if="$ctrl.allTypes.length > 0" ng-options="x.text for x in $ctrl.allTypes"></select>
+            <button class="btn btn-primary btn-sm" type="button" ng-disabled="!$ctrl.inputTodo || $ctrl.selectedType < 0" ng-click="$ctrl.submitTodo()">Add</button>
+            <button class="btn btn-default btn-sm" type="button" ng-disabled="!$ctrl.inputTodo || $ctrl.selectedType < 0" ng-click="$ctrl.submitTodoInXSeconds(2)">Add in 2 secs</button>
           </span>
         </div>
 
@@ -51,7 +30,7 @@
 
         <div class="form-inline">
           <ul id="sortable" class="list-unstyled">
-            <li class="ui-state-default paddingTopBottom5px" ng-repeat="todo in $ctrl.noErrorTodos" ng-if="!(!$ctrl.showDone && todo.done)">
+            <li class="ui-state-default paddingTop5pxBottom15px" ng-repeat="todo in $ctrl.noErrorTodosByType" ng-if="!(!$ctrl.showDone && todo.done)">
               <div class="checkbox">
                 <label class="done-{{todo.done}}">
                   <input type="checkbox" ng-checked="todo.done" ng-click="$ctrl.toggleDone(todo.id)" />
@@ -59,58 +38,51 @@
                 </label>
               </div>
 
-              <select class="form-control input-sm minWidth100px" ng-model="todo.type" ng-if="$ctrl.countAllTypes > 0" ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes">     
+              <select 
+                class="form-control input-sm" 
+                ng-init="selectedType=todo.type"
+                ng-model="selectedType" 
+                ng-if="$ctrl.allTypes.length > 0" 
+                ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes"
+                ng-change="$ctrl.submitChangeTodoType(todo.id, selectedType)">     
               </select>
+
               <button class="remove-item btn btn-danger btn-sm pull-right" ng-click="$ctrl.removeTodo($index)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
 
             </li>
           </ul>
+
+          <div class="center marginBottom15px" ng-if="!$ctrl.noErrorTodosByType.length > 0">
+            There are no to-dos to show
+          </div>
         </div>
 
         <div class="todo-footer">
-          <span class="count-todos bold">{{$ctrl.countAllTodos}}</span> total |
-          <span class="count-todos bold">{{$ctrl.countDoneTodos}}</span> done |
-          <span class="count-todos bold">{{$ctrl.countErrorTodos}}</span> error
+          <span class="count-todos bold">{{$ctrl.noErrorTodosByType.length}}</span> total |
+          <span class="count-todos bold">{{$ctrl.doneTodosByType.length}}</span> done |
+          <span class="count-todos bold">{{$ctrl.errorTodosByType.length}}</span> error
           <span class="pull-right"><i class="fa fa-spinner fa-spin" ng-if="$ctrl.isLoading"></i></span>
           <span class="pull-right bold notification">{{$ctrl.notification}}</span>
         </div>
+
       </div>
     </div>
     <div class="col-md-4">
-      <todo-list items-list="$ctrl.doneTodos" items-count="$ctrl.countDoneTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
+      <todo-list items-list="$ctrl.doneTodosByType" items-count="$ctrl.doneTodosByType.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
         action-type="'ToggleDone'" title-label="'Done'" no-records-label="'There are no done to-dos'" button-css-class="'remove-item btn-danger btn-xs pull-right'"
         button-span-css-class="'glyphicon glyphicon-remove'" ul-css-class="'list-items list-unstyled line-through'">
       </todo-list>
-      <todo-list items-list="$ctrl.errorTodos" items-count="$ctrl.countErrorTodos" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
+      <todo-list items-list="$ctrl.errorTodosByType" items-count="$ctrl.errorTodosByType.length" on-item-button-click="$ctrl.buttonClick(id, actionType, $event)"
         action-type="'CleanError'" title-label="'Error'" no-records-label="'There are no to-dos with errors'" button-css-class="'remove-item btn-primary btn-xs pull-right'"
         button-span-css-class="'glyphicon glyphicon-refresh'" ul-css-class="'list-items list-unstyled'">
       </todo-list>
-
-
-      <div class="todolist">
-        <h2>By type</h2>
-        <select class="form-control input-sm minWidth100px" ng-model="filterType" ng-if="$ctrl.countAllTypes > 0" ng-options="x.text for x in $ctrl.allTypes"></select>        {{$ctrl.getTodosByTypeGenerator}}
-{{$ctrl.allTodos}}
-        <div ng-if="$ctrl.allTodos.length > 0">
-          <ul ng-class="">
-            <li ng-repeat="item in $ctrl.allTodos">
-              {{item.text}}
-              <button ng-class="$ctrl.buttonCssClass" ng-click="$ctrl.itemButtonClick(item.id, $ctrl.actionType , $event)">
-          <span ng-class="$ctrl.buttonSpanCssClass"></span>
-        </button>
-            </li>
-          </ul>
-        </div>
-        <div class="center" ng-if="!$ctrl.itemsCount > 0">
-          {{$ctrl.noRecordsLabel}}
-        </div>
-
-      </div>
-
-
     </div>
+  </div>
+
+  <div class="marginTop30px">
+    <code>{{$ctrl.completeState}}</code>
   </div>
 
 </div>

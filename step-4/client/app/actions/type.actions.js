@@ -25,7 +25,7 @@ function addType(newType, hasError) {
 }
 
 /**
- *
+ * Removes the type with the received id
  * @param {Number} id
  * @return {Object}
  */
@@ -35,7 +35,6 @@ function removeType(id) {
     payload: id,
   };
 }
-
 
 /**
  * Exports the function so that they can be used as actions
