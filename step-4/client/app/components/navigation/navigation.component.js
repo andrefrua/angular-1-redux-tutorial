@@ -70,7 +70,7 @@ export const NavigationComponent = {
         // $ctrl.noErrorTodosByTypeCache.clear(); // Clear works without issues
 
         $ctrl.removeType(typeId);
-
+        // TODO: I believe it's removing the cache by index instead of id
         // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
         $ctrl.noErrorTodosByTypeCache.delete(typeId);
         // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
