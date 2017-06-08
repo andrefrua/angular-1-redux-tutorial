@@ -49,7 +49,26 @@ export const WithReduxComponent = {
        * @return {*} Selectors from the state and other needed variables
        */
       function mapStateToThis(typeId) {
-        return (state) => {
+        return function(state) {
+
+          alert(JSON.stringify(_.merge(
+            _.map(TodosSelectors.TodoSelectors.nonParametric, function(fn, key) {
+              return {[key]: fn(state)};
+            })
+          )));
+
+          return _.merge(
+              _.map(TodosSelectors.TodoSelectors.nonParametric, function(fn, key) {
+                return {[key]: fn(state)};
+              })
+            );
+
+
+          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.allTodos(state)));
+          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.noErrorTodos(state)));
+          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.doneTodos(state)));
+          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.errorTodos(state)));
+
 
           return {
             // TODO: Remove the below line and all it's references. It's just to show the current full state
@@ -61,15 +80,20 @@ export const WithReduxComponent = {
             showDone: state.TodosState.showDone,
             notification: state.TodosState.notification,
 
-            // Parametric Selectors
-            noErrorTodosByType: TodosSelectors.getNoErrorTodosByTypeGenerator(typeId)(state),
-            doneTodosByType: TodosSelectors.getDoneTodosByTypeGenerator(typeId)(state),
-            errorTodosByType: TodosSelectors.getErrorTodosByTypeGenerator(typeId)(state),
+            // Selectors
+            allTodos: TodosSelectors.TodoSelectors.nonParametric.allTodos(state),
 
-            // Parametric Selectors to list and delete
-            noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
-            doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
-            errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
+            // todoSelectors: TodosSelectors.TodoSelectors.nonParametric.getAllTodos(state),
+
+            // // Parametric Selectors
+            // noErrorTodosByType: TodosSelectors.getNoErrorTodosByTypeGenerator(typeId)(state),
+            // doneTodosByType: TodosSelectors.getDoneTodosByTypeGenerator(typeId)(state),
+            // errorTodosByType: TodosSelectors.getErrorTodosByTypeGenerator(typeId)(state),
+
+            // // Parametric Selectors to list and delete
+            // noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
+            // doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
+            // errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
 
             // Get from the types selector
             allTypes: TypesSelectors.getAllTypes(state),

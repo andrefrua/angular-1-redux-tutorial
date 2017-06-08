@@ -42,10 +42,10 @@ export const NavigationComponent = {
         return {
           allTypes: TypesSelectors.getAllTypes(state),
 
-          // Parametric Selectors to list and delete
-          noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
-          doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
-          errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
+          // // Parametric Selectors to list and delete
+          // noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
+          // doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
+          // errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
         };
       }
 
