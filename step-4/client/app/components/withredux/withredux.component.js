@@ -4,7 +4,7 @@ import './withredux.scss';
 import TodoActions from '../../actions/todo.actions';
 import TypeActions from '../../actions/type.actions';
 
-import TodosSelectors from '../../selectors/todos.selectors';
+import {TodoSelectors} from '../../selectors/todos.selectors';
 import TypesSelectors from '../../selectors/types.selectors';
 
 export const WithReduxComponent = {
@@ -28,6 +28,7 @@ export const WithReduxComponent = {
 
       $ctrl.buttonClick = buttonClick;
       $ctrl.getTypeById = getTypeById;
+      $ctrl.clearSelectorsCache = clearSelectorsCache;
 
       $ctrl.inputTodo = '';
       $ctrl.selectedTypeId = $stateParams.typeid;
@@ -50,27 +51,7 @@ export const WithReduxComponent = {
        */
       function mapStateToThis(typeId) {
         return function(state) {
-
-          alert(JSON.stringify(_.merge(
-            _.map(TodosSelectors.TodoSelectors.nonParametric, function(fn, key) {
-              return {[key]: fn(state)};
-            })
-          )));
-
-          return _.merge(
-              _.map(TodosSelectors.TodoSelectors.nonParametric, function(fn, key) {
-                return {[key]: fn(state)};
-              })
-            );
-
-
-          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.allTodos(state)));
-          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.noErrorTodos(state)));
-          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.doneTodos(state)));
-          // alert(JSON.stringify(TodosSelectors.TodoSelectors.nonParametric.errorTodos(state)));
-
-
-          return {
+          return _.merge({
             // TODO: Remove the below line and all it's references. It's just to show the current full state
             completeState: state,
 
@@ -80,24 +61,29 @@ export const WithReduxComponent = {
             showDone: state.TodosState.showDone,
             notification: state.TodosState.notification,
 
-            // Selectors
-            allTodos: TodosSelectors.TodoSelectors.nonParametric.allTodos(state),
-
-            // todoSelectors: TodosSelectors.TodoSelectors.nonParametric.getAllTodos(state),
-
-            // // Parametric Selectors
-            // noErrorTodosByType: TodosSelectors.getNoErrorTodosByTypeGenerator(typeId)(state),
-            // doneTodosByType: TodosSelectors.getDoneTodosByTypeGenerator(typeId)(state),
-            // errorTodosByType: TodosSelectors.getErrorTodosByTypeGenerator(typeId)(state),
-
-            // // Parametric Selectors to list and delete
-            // noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
-            // doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
-            // errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
-
             // Get from the types selector
             allTypes: TypesSelectors.getAllTypes(state),
-          };
+          },
+            /**
+             * Standard selectors
+             */
+            _.map(TodoSelectors.nonParametric, function(fn, key) {
+              return {[key]: fn(state)};
+            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
+            /**
+             * Parametric selectors
+             */
+            _.map(TodoSelectors.parametric.type, function(fn, key) {
+              return {[key]: fn(typeId)(state)};
+            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
+
+            /**
+             * Parametric selectors actions
+             */
+            {
+              todoParametricActions: TodoSelectors.parametric.actions,
+            }
+          );
         };
       };
 
@@ -160,6 +146,16 @@ export const WithReduxComponent = {
       function getTypeById(typeId) {
         let types = $ctrl.allTypes.filter((type) => type.id === parseInt(typeId));
         return types.length > 0 ? types[0].text : 'All types';
+      }
+      /**
+       * Clears the cache on all the parametric selectors
+       */
+      function clearSelectorsCache() {
+        for (let auxType in $ctrl.allTypes) {
+          if ($ctrl.allTypes.hasOwnProperty(auxType)) {
+            TodoSelectors.parametric.actions.delete(auxType);
+          }
+        }
       }
     }
   },

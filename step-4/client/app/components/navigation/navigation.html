@@ -4,7 +4,14 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <!--Adds an extra li element to show all the type of todos-->
-        <li ng-class="{active: $ctrl.selectedTypeId == 0}"><a href="#!/0">All types</a></li>
+        <li ng-class="{active: $ctrl.selectedTypeId == 0}">
+          <a href="#!/0">
+            All types
+              <button class="btn btn-primary btn-xs marginTopBottomMinus5px" ng-click="$ctrl.removeTypeAndPreventDefault(0);" title="Only clears the cache">
+                <span class="glyphicon glyphicon-ban-circle"></span>
+              </button>
+          </a>
+        </li>
 
         <li ng-class="{active: $ctrl.selectedTypeId == type.id}" ng-repeat="type in $ctrl.allTypes">
           <a href="#!/{{type.id}}">
@@ -31,11 +38,3 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
-
-<!--<div>
-  <code>{{$ctrl.completeState}}</code>
-  <p class="bold marginTop10px">Current cache:</p>
-  Main list: <code>{{$ctrl.noErrorTodosByTypeCache.list()}}</code><br/>
-  Done list: <code>{{$ctrl.doneTodosByTypeCache.list()}}</code><br/>
-  Errors list: <code>{{$ctrl.errorTodosByTypeCache.list()}}</code><br/>
-</div>-->

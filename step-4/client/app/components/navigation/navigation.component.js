@@ -3,7 +3,7 @@ import './navigation.scss';
 
 import TypeActions from '../../actions/type.actions';
 
-import TodosSelectors from '../../selectors/todos.selectors';
+import {TodoSelectors} from '../../selectors/todos.selectors';
 import TypesSelectors from '../../selectors/types.selectors';
 
 export const NavigationComponent = {
@@ -39,13 +39,13 @@ export const NavigationComponent = {
        * @return {*} Selectors from the state and other needed variables
        */
       function mapStateToThis(state) {
+
+
         return {
           allTypes: TypesSelectors.getAllTypes(state),
 
-          // // Parametric Selectors to list and delete
-          // noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
-          // doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
-          // errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
+          // Gets the selector actions properties
+          todoParametricActions: TodoSelectors.parametric.actions,
         };
       }
 
@@ -66,16 +66,9 @@ export const NavigationComponent = {
        * @param {*} typeId
        */
       function removeTypeAndPreventDefault(typeId) {
-
-        // $ctrl.noErrorTodosByTypeCache.clear(); // Clear works without issues
-
         $ctrl.removeType(typeId);
-        // TODO: I believe it's removing the cache by index instead of id
-        // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
-        $ctrl.noErrorTodosByTypeCache.delete(typeId);
-        // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
-        $ctrl.doneTodosByTypeCache.delete(typeId);
-        $ctrl.errorTodosByTypeCache.delete(typeId);
+
+        $ctrl.todoParametricActions.delete(typeId);
 
         event.preventDefault();
       }
