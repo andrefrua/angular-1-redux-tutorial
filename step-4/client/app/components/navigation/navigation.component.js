@@ -3,7 +3,7 @@ import './navigation.scss';
 
 import TypeActions from '../../actions/type.actions';
 
-import TodosSelectors from '../../selectors/todos.selectors';
+import TodoSelectors from '../../selectors/todos.selectors';
 import TypesSelectors from '../../selectors/types.selectors';
 
 export const NavigationComponent = {
@@ -24,8 +24,9 @@ export const NavigationComponent = {
 
       $ctrl.selectedTypeId = $stateParams.typeid;
 
-      $ctrl.unsubscribe = $ngRedux.connect(mapStateToThis, {...TypeActions})($ctrl);
-
+      $ctrl.unsubscribe = $ngRedux.connect(
+        mapStateToThis($stateParams.typeid), {...TypeActions}
+      )($ctrl);
       /**
        * onDestroy method
        */
@@ -33,22 +34,34 @@ export const NavigationComponent = {
         $ctrl.unsubscribe();
       }
 
-      /**
+ /**
        * mapStateToThis - Maps the state to the controller
-       * @param {*} state
+       * @param {*} typeId
        * @return {*} Selectors from the state and other needed variables
        */
-      function mapStateToThis(state) {
-        return {
-          allTypes: TypesSelectors.getAllTypes(state),
+      function mapStateToThis(typeId) {
+        return function(state) {
+          return _.merge({
 
-          // Parametric Selectors to list and delete
-          noErrorTodosByTypeCache: TodosSelectors.getNoErrorTodosByTypeGenerator.$cache,
-          doneTodosByTypeCache: TodosSelectors.getDoneTodosByTypeGenerator.$cache,
-          errorTodosByTypeCache: TodosSelectors.getErrorTodosByTypeGenerator.$cache,
+            // Get from the types selector
+            allTypes: TypesSelectors.getAllTypes(state),
+          },
+            /**
+             * Standard selectors
+             */
+            _.map(TodoSelectors.nonParametric, function(fn, key) {
+              return {[key]: fn(state)};
+            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
+            /**
+             * Parametric selectors
+             */
+            _.map(TodoSelectors.parametric.type, function(fn, key) {
+              return {[key]: fn(typeId)(state)};
+            })[0] // TODO: Don't like having to use 0 index on the map. There must be a better way
+
+          );
         };
-      }
-
+      };
       /**
        * Calls the action addType send the input parameter and clearing the input type
        */
@@ -66,16 +79,9 @@ export const NavigationComponent = {
        * @param {*} typeId
        */
       function removeTypeAndPreventDefault(typeId) {
-
-        // $ctrl.noErrorTodosByTypeCache.clear(); // Clear works without issues
-
         $ctrl.removeType(typeId);
-        // TODO: I believe it's removing the cache by index instead of id
-        // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
-        $ctrl.noErrorTodosByTypeCache.delete(typeId);
-        // alert(JSON.stringify($ctrl.noErrorTodosByTypeCache.list()));
-        $ctrl.doneTodosByTypeCache.delete(typeId);
-        $ctrl.errorTodosByTypeCache.delete(typeId);
+
+        TodoSelectors.parametric.type.$cache.delete(typeId);
 
         event.preventDefault();
       }

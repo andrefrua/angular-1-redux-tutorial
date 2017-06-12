@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-center">
-      <h1>Selected type: {{$ctrl.getTypeById($ctrl.selectedTypeId)}}</h1>
+      <h1>Selected type: {{$ctrl.getTypeById($ctrl.selectedTypeId)}}</h1>      
     </div>
 
     <div class="col-md-8">
@@ -74,15 +74,44 @@
         button-span-css-class="'glyphicon glyphicon-refresh'" ul-css-class="'list-items list-unstyled'">
       </todo-list>
     </div>
+
+    <!--<div class="col-md-12">
+      <div class="todolist not-done">
+        <h2>All Todo regardless of type or status</h2>
+
+        <div class="form-inline">
+          <ul id="sortable" class="list-unstyled">
+            <li class="ui-state-default paddingTop5pxBottom15px" ng-repeat="todo in $ctrl.allTodos" ng-if="!(!$ctrl.showDone && todo.done)">
+
+              <label class="done-{{todo.done}}">            
+                {{todo.text}}
+              </label>
+
+              <select class="form-control input-sm" disabled ng-init="selectedType=todo.type" ng-model="selectedType" ng-if="$ctrl.allTypes.length > 0"
+                ng-options="selectedType.id as selectedType.text for selectedType in $ctrl.allTypes" ng-change="$ctrl.submitChangeTodoType(todo.id, selectedType)">     
+              </select>
+
+            </li>
+          </ul>
+          <div class="center marginBottom15px" ng-if="!$ctrl.allTodos.length > 0">
+            There are no to-dos to show
+          </div>
+        </div>
+
+      </div>
+    </div>-->
+
   </div>
 
   <div class="marginTop30px">
     <p class="bold">Current state:</p>
     <code>{{$ctrl.completeState}}</code>
     <p class="bold marginTop10px">Current cache:</p>
-    Main list: <code>{{$ctrl.noErrorTodosByTypeCache.list()}}</code><br/>
-    Done list: <code>{{$ctrl.doneTodosByTypeCache.list()}}</code><br/>
-    Errors list: <code>{{$ctrl.errorTodosByTypeCache.list()}}</code><br/>
+    <p ng-repeat="item in $ctrl.todoParametricActions.list">{{item.key}}: <code>{{item.cachedList}}</code></p>
+    <!--<p>Main: <code>{{$ctrl.noErrorTodosByTypeCache.list()}}</code></p>
+    <p>Done: <code>{{$ctrl.doneTodosByTypeCache.list()}}</code></p>
+    <p>Error: <code>{{$ctrl.errorTodosByTypeCache.list()}}</code></p>-->
+    <button class="btn btn-primary btn-lg" type="button" ng-click="$ctrl.clearSelectorsCache()"><span class="glyphicon glyphicon-ban-circle"></span> Clear selectors cache</button>
   </div>
 
 </div>
