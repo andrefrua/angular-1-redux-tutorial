@@ -3,7 +3,7 @@ import './navigation.scss';
 
 import TypeActions from '../../actions/type.actions';
 
-import {TodoSelectors} from '../../selectors/todos.selectors';
+import TodoSelectors from '../../selectors/todos.selectors';
 import TypesSelectors from '../../selectors/types.selectors';
 
 export const NavigationComponent = {
@@ -24,8 +24,9 @@ export const NavigationComponent = {
 
       $ctrl.selectedTypeId = $stateParams.typeid;
 
-      $ctrl.unsubscribe = $ngRedux.connect(mapStateToThis, {...TypeActions})($ctrl);
-
+      $ctrl.unsubscribe = $ngRedux.connect(
+        mapStateToThis($stateParams.typeid), {...TypeActions}
+      )($ctrl);
       /**
        * onDestroy method
        */
@@ -33,22 +34,34 @@ export const NavigationComponent = {
         $ctrl.unsubscribe();
       }
 
-      /**
+ /**
        * mapStateToThis - Maps the state to the controller
-       * @param {*} state
+       * @param {*} typeId
        * @return {*} Selectors from the state and other needed variables
        */
-      function mapStateToThis(state) {
+      function mapStateToThis(typeId) {
+        return function(state) {
+          return _.merge({
 
+            // Get from the types selector
+            allTypes: TypesSelectors.getAllTypes(state),
+          },
+            /**
+             * Standard selectors
+             */
+            _.map(TodoSelectors.nonParametric, function(fn, key) {
+              return {[key]: fn(state)};
+            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
+            /**
+             * Parametric selectors
+             */
+            _.map(TodoSelectors.parametric.type, function(fn, key) {
+              return {[key]: fn(typeId)(state)};
+            })[0] // TODO: Don't like having to use 0 index on the map. There must be a better way
 
-        return {
-          allTypes: TypesSelectors.getAllTypes(state),
-
-          // Gets the selector actions properties
-          todoParametricActions: TodoSelectors.parametric.actions,
+          );
         };
-      }
-
+      };
       /**
        * Calls the action addType send the input parameter and clearing the input type
        */
@@ -68,7 +81,7 @@ export const NavigationComponent = {
       function removeTypeAndPreventDefault(typeId) {
         $ctrl.removeType(typeId);
 
-        $ctrl.todoParametricActions.delete(typeId);
+        TodoSelectors.parametric.type.$cache.delete(typeId);
 
         event.preventDefault();
       }

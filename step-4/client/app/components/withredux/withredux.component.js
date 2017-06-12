@@ -4,7 +4,7 @@ import './withredux.scss';
 import TodoActions from '../../actions/todo.actions';
 import TypeActions from '../../actions/type.actions';
 
-import {TodoSelectors} from '../../selectors/todos.selectors';
+import TodoSelectors from '../../selectors/todos.selectors';
 import TypesSelectors from '../../selectors/types.selectors';
 
 export const WithReduxComponent = {
@@ -77,11 +77,17 @@ export const WithReduxComponent = {
               return {[key]: fn(typeId)(state)};
             })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
 
+            // TEST
+            // {
+            //   noErrorTodosByTypeCache: TodoSelectors.parametric.type.noErrorTodosByType.$cache,
+            //   doneTodosByTypeCache: TodoSelectors.parametric.type.doneTodosByType.$cache,
+            //   errorTodosByTypeCache: TodoSelectors.parametric.type.errorTodosByType.$cache,
+            // },
             /**
              * Parametric selectors actions
              */
             {
-              todoParametricActions: TodoSelectors.parametric.actions,
+              todoParametricActions: TodoSelectors.parametric.type.$cache,
             }
           );
         };
@@ -137,7 +143,6 @@ export const WithReduxComponent = {
             break;
         }
       }
-
       /**
        * Returns the name of the type using the received Id
        * @param {Number} typeId
@@ -151,11 +156,8 @@ export const WithReduxComponent = {
        * Clears the cache on all the parametric selectors
        */
       function clearSelectorsCache() {
-        for (let auxType in $ctrl.allTypes) {
-          if ($ctrl.allTypes.hasOwnProperty(auxType)) {
-            TodoSelectors.parametric.actions.delete(auxType);
-          }
-        }
+        TodoSelectors.parametric.type.$cache.delete(0);
+        _.each($ctrl.allTypes, (type) => TodoSelectors.parametric.type.$cache.delete(type.id));
       }
     }
   },

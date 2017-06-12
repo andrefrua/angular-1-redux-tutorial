@@ -30,48 +30,71 @@ const getErrorTodosByTypeGenerator = selectorsUtils.createParametricSelectorGene
 );
 
 /**
- * Object to export with all the selectors definitions
+ * Defines the Selector object to be exported
  */
-export const TodoSelectors = {
+const TodoSelectors = {
   nonParametric: {
     allTodos: getAllTodos,
     noErrorTodos: getNoErrorTodos,
     doneTodos: getDoneTodos,
     errorTodos: getErrorTodos,
   },
-  parametric: {
-    type: {
-      noErrorTodosByType: getNoErrorTodosByTypeGenerator,
-      doneTodosByType: getDoneTodosByTypeGenerator,
-      errorTodosByType: getErrorTodosByTypeGenerator,
-    },
-    /**
-     * Possible actions to be executed on the selectors
-     */
-    actions: {
-      /**
-       * Deletes the specified type id in all parametric selectors
-       * @param {Number} typeId
-       */
-      delete: function(typeId) {
-        for (let auxType in TodoSelectors.parametric.type) {
-          if (TodoSelectors.parametric.type.hasOwnProperty(auxType)) {
-            TodoSelectors.parametric.type[auxType].$cache.delete(typeId);
-          }
-        }
-      },
-      /**
-       * Returns a list of values on each parametric selectors
-       * @return {*} typeId
-       */
-      list: function() {
-        return _.map(TodoSelectors.parametric.type, function(fn, key) {
-          return {
-            parametricType: key,
-            cachedList: TodoSelectors.parametric.type[key].$cache.list(),
-          };
-        });
-      },
-    },
-  },
+  parametric: {},
+  // parametric: {
+  //   byType: {
+  //     noErrorTodosByType: getNoErrorTodosByTypeGenerator,
+  //     doneTodosByType: getDoneTodosByTypeGenerator,
+  //     errorTodosByType: getErrorTodosByTypeGenerator,
+  //   },
+  //   /**
+  //    * Possible actions to be executed on the selectors
+  //    */
+  //   actions: {
+  //     /**
+  //      * Deletes the specified type id in all parametric selectors
+  //      * @param {Number} typeId
+  //      */
+  //     delete: function(typeId) {
+  //       for (let auxType in TodoSelectors.parametric.type) {
+  //         if (TodoSelectors.parametric.type.hasOwnProperty(auxType)) {
+  //           TodoSelectors.parametric.type[auxType].$cache.delete(typeId);
+  //         }
+  //       }
+  //     },
+  //     /**
+  //      * Returns a list of values on each parametric selectors
+  //      * @return {*} typeId
+  //      */
+  //     list: function() {
+  //       return _.map(TodoSelectors.parametric.type, function(fn, key) {
+  //         return {
+  //           parametricType: key,
+  //           cachedList: TodoSelectors.parametric.type[key].$cache.list(),
+  //         };
+  //       });
+  //     },
+  //   },
+  // },
 };
+
+let byType = {
+  noErrorTodosByType: getNoErrorTodosByTypeGenerator,
+  doneTodosByType: getDoneTodosByTypeGenerator,
+  errorTodosByType: getErrorTodosByTypeGenerator,
+};
+
+Object.defineProperty(byType, '$cache', {
+  get: function() {
+    return {
+      delete: (key) =>
+        _.each(byType,
+          (selector) => selector.$cache.delete(key)
+        ),
+      list: _.map(byType, (selector, key) => ({key: key, cachedList: selector.$cache.list()})),
+    };
+  },
+});
+
+TodoSelectors.parametric.type = byType;
+
+export default TodoSelectors;
