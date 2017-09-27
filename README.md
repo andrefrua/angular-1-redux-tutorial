@@ -38,13 +38,13 @@ Angular 1 with Redux tutorial to help understand Angular, Redux, Async actions a
     <li>4 A new menu was also created to the navigation.html file for the WithRedux component;</li>
     <li>
         <ul>5 Several new folders were created in order to separate files to be used for redux:
-            <li>- actions:<br/>This is were the todo actions are stored;</li>
-            <li>- reducers:<br/>Here you have the todo reducer that will handle the state of the todo app;</li>
-            <li>- selectors:<br/>- Some helper functions there are used for the selectors;</li>
+            <li>actions:<br/>This is were the todo actions are stored;</li>
+            <li>reducers:<br/>Here you have the todo reducer that will handle the state of the todo app;</li>
+            <li>selectors:<br/>Some helper functions there are used for the selectors;</li>
         </ul>        
     </li>
 </ul>
 <ul><strong>Step 4 - Everything used in step 3 with the addition of parametric selectors:</strong>
-    <li>1 To run this step simply do same as done on the previous steps;</li>
-    <li>2 On the withredux component inside the mapStateToThis functions the parametric selectors were added, the function was also changes in order to received the type id as a parameter</li>
+    <li>1 To run this step simply do the same as done on the previous steps;</li>
+    <li>2 On the withredux component inside the mapStateToThis functions the parametric selectors were added, the function was also changed in order to receive the type id as a parameter</li>
 </ul>
