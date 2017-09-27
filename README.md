@@ -36,8 +36,8 @@ Angular 1 with Redux tutorial to help understand Angular, Redux, Async actions a
     <li>2 Several dependencies were added to the project, such as ng-redux and redux-thunk;</li>
     <li>3 A new component called WithRedux was created and references were added to the app.js;</li>
     <li>4 A new menu was also created to the navigation.html file for the WithRedux component;</li>
-    <li>
-        <ul>5 Several new folders were created in order to separate files to be used for redux:
+    <li>5 Several new folders were created in order to separate files to be used for redux:
+        <ul>
             <li>actions:<br/>This is were the todo actions are stored;</li>
             <li>reducers:<br/>Here you have the todo reducer that will handle the state of the todo app;</li>
             <li>selectors:<br/>Some helper functions there are used for the selectors;</li>
