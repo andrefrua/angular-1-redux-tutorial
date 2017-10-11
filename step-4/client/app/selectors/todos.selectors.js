@@ -40,41 +40,6 @@ const TodoSelectors = {
     errorTodos: getErrorTodos,
   },
   parametric: {},
-  // parametric: {
-  //   byType: {
-  //     noErrorTodosByType: getNoErrorTodosByTypeGenerator,
-  //     doneTodosByType: getDoneTodosByTypeGenerator,
-  //     errorTodosByType: getErrorTodosByTypeGenerator,
-  //   },
-  //   /**
-  //    * Possible actions to be executed on the selectors
-  //    */
-  //   actions: {
-  //     /**
-  //      * Deletes the specified type id in all parametric selectors
-  //      * @param {Number} typeId
-  //      */
-  //     delete: function(typeId) {
-  //       for (let auxType in TodoSelectors.parametric.type) {
-  //         if (TodoSelectors.parametric.type.hasOwnProperty(auxType)) {
-  //           TodoSelectors.parametric.type[auxType].$cache.delete(typeId);
-  //         }
-  //       }
-  //     },
-  //     /**
-  //      * Returns a list of values on each parametric selectors
-  //      * @return {*} typeId
-  //      */
-  //     list: function() {
-  //       return _.map(TodoSelectors.parametric.type, function(fn, key) {
-  //         return {
-  //           parametricType: key,
-  //           cachedList: TodoSelectors.parametric.type[key].$cache.list(),
-  //         };
-  //       });
-  //     },
-  //   },
-  // },
 };
 
 let byType = {

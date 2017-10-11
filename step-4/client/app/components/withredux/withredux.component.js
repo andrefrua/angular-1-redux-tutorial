@@ -67,28 +67,16 @@ export const WithReduxComponent = {
             /**
              * Standard selectors
              */
-            _.map(TodoSelectors.nonParametric, function(fn, key) {
+           _.reduce(_.map(TodoSelectors.nonParametric, function(fn, key) {
               return {[key]: fn(state)};
-            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
+            }), _.merge, {}),
             /**
              * Parametric selectors
              */
-            _.map(TodoSelectors.parametric.type, function(fn, key) {
+            // TODO: Create function in selectorUtils
+            _.reduce(_.map(TodoSelectors.parametric.type, function(fn, key) {
               return {[key]: fn(typeId)(state)};
-            })[0], // TODO: Don't like having to use 0 index on the map. There must be a better way
-
-            // TEST
-            // {
-            //   noErrorTodosByTypeCache: TodoSelectors.parametric.type.noErrorTodosByType.$cache,
-            //   doneTodosByTypeCache: TodoSelectors.parametric.type.doneTodosByType.$cache,
-            //   errorTodosByTypeCache: TodoSelectors.parametric.type.errorTodosByType.$cache,
-            // },
-            /**
-             * Parametric selectors actions
-             */
-            {
-              todoParametricActions: TodoSelectors.parametric.type.$cache,
-            }
+            }), _.merge, {})
           );
         };
       };

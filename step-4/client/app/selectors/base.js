@@ -40,3 +40,9 @@ export const createParametricSelectorGenerator = (fn) => {
 
   return f;
 };
+
+export const flattenSelectorAttributes = (selector, state) => {
+  _.reduce(_.map(selector, function(fn, key) {
+    return {[key]: fn(state)};
+  }), _.merge, {});
+};

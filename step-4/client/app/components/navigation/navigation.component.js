@@ -34,7 +34,7 @@ export const NavigationComponent = {
         $ctrl.unsubscribe();
       }
 
- /**
+      /**
        * mapStateToThis - Maps the state to the controller
        * @param {*} typeId
        * @return {*} Selectors from the state and other needed variables
@@ -81,7 +81,9 @@ export const NavigationComponent = {
       function removeTypeAndPreventDefault(typeId) {
         $ctrl.removeType(typeId);
 
+        console.log(TodoSelectors.parametric.type.$cache.list);
         TodoSelectors.parametric.type.$cache.delete(typeId);
+        console.log(TodoSelectors.parametric.type.$cache.list);
 
         event.preventDefault();
       }
